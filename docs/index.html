@@ -3,53 +3,308 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Cluj-Napoca Tech Jobs</title>
+<title>Cluj Tech Jobs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
   :root {
-    --bg: #0f1117; --surface: #1a1d2e; --border: #2a2d3e;
-    --accent: #6366f1; --accent2: #22d3ee;
-    --text: #e2e8f0; --muted: #94a3b8;
+    --burgundy:   #6B1F2A;
+    --burgundy-d: #4E1620;
+    --burgundy-l: #8B3040;
+    --cream:      #F5EFE6;
+    --cream-d:    #EDE4D6;
+    --cream-dd:   #D9CEBD;
+    --text:       #2C1810;
+    --text-soft:  #6B5B52;
+    --white:      #FDFAF6;
+    --shadow:     rgba(44,24,16,.10);
+    --radius:     14px;
   }
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; }
-  header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
-  header h1 { font-size: 1.5rem; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  .meta { color: var(--muted); font-size: 0.85rem; }
-  .meta strong { color: var(--accent2); }
-  .controls { padding: 1.5rem 2rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; background: var(--surface); border-bottom: 1px solid var(--border); }
-  input, select { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 0.5rem 0.75rem; border-radius: 8px; font-size: 0.9rem; outline: none; transition: border-color .2s; }
-  input:focus, select:focus { border-color: var(--accent); }
-  input { min-width: 240px; }
-  #count { color: var(--muted); font-size: 0.85rem; margin-left: auto; }
-  .table-wrap { overflow-x: auto; padding: 0 2rem 2rem; }
-  table { width: 100%; border-collapse: collapse; margin-top: 1.5rem; }
-  th { text-align: left; padding: 0.75rem 1rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--bg); }
-  td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); font-size: 0.9rem; vertical-align: middle; }
-  td.date { color: var(--muted); white-space: nowrap; font-size: 0.8rem; }
-  tr:hover td { background: var(--surface); }
-  a { color: var(--accent); text-decoration: none; }
-  a:hover { color: var(--accent2); text-decoration: underline; }
-  .badge { background: rgba(99,102,241,.15); color: var(--accent); border: 1px solid rgba(99,102,241,.3); padding: .2rem .6rem; border-radius: 999px; font-size: 0.75rem; white-space: nowrap; }
+
+  body {
+    background: var(--cream);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--burgundy-d);
+    padding: 2.5rem 3rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 0; right: 0;
+    height: 32px;
+    background: var(--cream);
+    clip-path: ellipse(55% 100% at 50% 100%);
+  }
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  header h1 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: var(--cream);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  header h1 span {
+    color: var(--cream-dd);
+    font-weight: 400;
+    display: block;
+    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+  }
+  .header-meta {
+    text-align: right;
+    color: rgba(245,239,230,.6);
+    font-size: 0.8rem;
+    line-height: 1.6;
+  }
+  .header-meta strong { color: var(--cream); }
+
+  /* ── Controls ── */
+  .controls-wrap {
+    background: var(--white);
+    border-bottom: 1px solid var(--cream-dd);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px var(--shadow);
+  }
+  .controls {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1rem 3rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+  }
+  .search-wrap {
+    position: relative;
+    flex: 1;
+    min-width: 220px;
+  }
+  .search-wrap svg {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-soft);
+    pointer-events: none;
+  }
+  input[type=search] {
+    width: 100%;
+    padding: 0.6rem 0.75rem 0.6rem 2.3rem;
+    border: 1.5px solid var(--cream-dd);
+    border-radius: 999px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    color: var(--text);
+    background: var(--cream);
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+    -webkit-appearance: none;
+  }
+  input[type=search]:focus {
+    border-color: var(--burgundy);
+    box-shadow: 0 0 0 3px rgba(107,31,42,.12);
+  }
+  select {
+    padding: 0.6rem 2rem 0.6rem 0.9rem;
+    border: 1.5px solid var(--cream-dd);
+    border-radius: 999px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    color: var(--text);
+    background: var(--cream) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B5B52' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 0.7rem center;
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+    cursor: pointer;
+    transition: border-color .2s;
+  }
+  select:focus { border-color: var(--burgundy); }
+  #count {
+    margin-left: auto;
+    font-size: 0.8rem;
+    color: var(--text-soft);
+    white-space: nowrap;
+    font-weight: 500;
+  }
+
+  /* ── Cards ── */
+  .cards-wrap {
+    max-width: 1100px;
+    margin: 2rem auto;
+    padding: 0 3rem 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .card {
+    background: var(--white);
+    border: 1px solid var(--cream-dd);
+    border-radius: var(--radius);
+    padding: 1.1rem 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+    transition: box-shadow .2s, border-color .2s, transform .15s;
+    cursor: default;
+  }
+  .card:hover {
+    box-shadow: 0 4px 20px var(--shadow);
+    border-color: var(--burgundy-l);
+    transform: translateY(-1px);
+  }
+
+  .avatar {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--burgundy), var(--burgundy-l));
+    color: var(--cream);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: 0.03em;
+  }
+
+  .card-body {
+    flex: 1;
+    min-width: 0;
+  }
+  .job-title {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0.25rem;
+    transition: color .15s;
+  }
+  .job-title:hover {
+    color: var(--burgundy);
+    text-decoration: underline;
+    text-decoration-color: var(--burgundy-l);
+  }
+  .job-meta {
+    font-size: 0.8rem;
+    color: var(--text-soft);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+  .company-name { font-weight: 500; }
+  .dot { color: var(--cream-dd); }
+
+  .card-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.4rem;
+    flex-shrink: 0;
+  }
+  .badge {
+    background: rgba(107,31,42,.08);
+    color: var(--burgundy);
+    border: 1px solid rgba(107,31,42,.18);
+    padding: .2rem .65rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .date {
+    font-size: 0.75rem;
+    color: var(--text-soft);
+    white-space: nowrap;
+  }
+
   .hidden { display: none !important; }
-  @media (max-width: 600px) { .controls { flex-direction: column; } input { min-width: 100%; } }
-  .footer { text-align: center; padding: 2rem; color: var(--muted); font-size: 0.8rem; border-top: 1px solid var(--border); }
-  .pill { display: inline-block; background: rgba(34,211,238,.1); color: var(--accent2); padding: .15rem .5rem; border-radius: 999px; font-size: .75rem; margin-left: .5rem; }
+
+  #noResults {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--text-soft);
+    font-size: 0.95rem;
+  }
+
+  /* ── Footer ── */
+  footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-soft);
+    font-size: 0.78rem;
+    border-top: 1px solid var(--cream-dd);
+  }
+  footer a { color: var(--burgundy); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  /* ── Responsive ── */
+  @media (max-width: 700px) {
+    header { padding: 2rem 1.5rem 1.75rem; }
+    header h1 { font-size: 1.8rem; }
+    .header-meta { display: none; }
+    .controls { padding: 0.75rem 1.5rem; }
+    .cards-wrap { padding: 1rem 1.5rem 2rem; }
+    .card-right .badge { display: none; }
+  }
 </style>
 </head>
 <body>
+
 <header>
-  <div>
-    <h1>🏔️ Cluj-Napoca Tech Jobs</h1>
-    <p class="meta">Last updated: <strong>2026-11-16 22:06 UTC</strong> · <strong>20</strong> positions</p>
+  <div class="header-inner">
+    <h1>
+      <span>Cluj-Napoca</span>
+      Tech Jobs Board
+    </h1>
+    <div class="header-meta">
+      Updated <strong>16 Nov 2026, 22:20 UTC</strong><br/>
+      <strong>20</strong> open positions · auto-refreshed daily
+    </div>
   </div>
-  <div class="meta">Auto-refreshed daily via GitHub Actions</div>
 </header>
 
-<div class="controls">
-  <input id="search" type="search" placeholder="🔍 Filter by title, company, keyword…" oninput="filter()"/>
-  <select id="companyFilter" onchange="filter()">
-    <option value="">All companies</option>
-    <option value="Accenture">Accenture</option>
+<div class="controls-wrap">
+  <div class="controls">
+    <div class="search-wrap">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="search" type="search" placeholder="Search by title, company, keyword…" oninput="filter()"/>
+    </div>
+    <select id="companyFilter" onchange="filter()">
+      <option value="">All companies</option>
+      <option value="Accenture">Accenture</option>
 <option value="Bosch">Bosch</option>
 <option value="Cognizant Softvision">Cognizant Softvision</option>
 <option value="Continental">Continental</option>
@@ -64,199 +319,387 @@
 <option value="Siemens">Siemens</option>
 <option value="UiPath">UiPath</option>
 <option value="Yonder">Yonder</option>
-  </select>
-  <select id="sourceFilter" onchange="filter()">
-    <option value="">All sources</option>
-    <option value="bestjobs.eu">bestjobs.eu</option>
+    </select>
+    <select id="sourceFilter" onchange="filter()">
+      <option value="">All sources</option>
+      <option value="bestjobs.eu">bestjobs.eu</option>
 <option value="careers page">careers page</option>
 <option value="ejobs.ro">ejobs.ro</option>
 <option value="hipo.ro">hipo.ro</option>
-  </select>
-  <span id="count"></span>
+    </select>
+    <span id="count"></span>
+  </div>
 </div>
 
-<div class="table-wrap">
-<table id="jobTable">
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>Job Title</th>
-      <th>Company</th>
-      <th>Source</th>
-      <th>Location</th>
-    </tr>
-  </thead>
-  <tbody>
-    
-        <tr data-company="UiPath" data-source="careers page">
-          <td class="date">2026-11-16</td>
-          <td><a href="https://www.uipath.com/company/careers/jobs" target="_blank" rel="noopener">Senior Software Engineer</a></td>
-          <td>UiPath</td>
-          <td><span class="badge">careers page</span></td>
-          <td>Cluj-Napoca</td>
-        </tr>
-        <tr data-company="Bosch" data-source="careers page">
-          <td class="date">2026-11-16</td>
-          <td><a href="https://www.bosch.com/careers/" target="_blank" rel="noopener">Embedded C++ Developer</a></td>
-          <td>Bosch</td>
-          <td><span class="badge">careers page</span></td>
-          <td>Cluj-Napoca</td>
-        </tr>
-        <tr data-company="Endava" data-source="careers page">
-          <td class="date">2026-11-15</td>
-          <td><a href="https://www.endava.com/en/careers/" target="_blank" rel="noopener">Full Stack Developer (React/Java)</a></td>
-          <td>Endava</td>
-          <td><span class="badge">careers page</span></td>
-          <td>Cluj-Napoca</td>
-        </tr>
-        <tr data-company="Continental" data-source="careers page">
-          <td class="date">2026-11-15</td>
-          <td><a href="https://www.continental.com/en/career/" target="_blank" rel="noopener">Hardware Design Engineer</a></td>
-          <td>Continental</td>
-          <td><span class="badge">careers page</span></td>
-          <td>Cluj-Napoca</td>
-        </tr>
-        <tr data-company="NTT DATA" data-source="careers page">
-          <td class="date">2026-11-15</td>
-          <td><a href="https://ro.nttdata.com/ro/cariere" target="_blank" rel="noopener">Python Backend Developer</a></td>
-          <td>NTT DATA</td>
-          <td><span class="badge">careers page</span></td>
-          <td>Cluj-Napoca</td>
-        </tr>
-        <tr data-company="Cognizant Softvision" data-source="careers page">
-          <td class="date">2026-11-14</td>
-          <td><a href="https://careers.cognizant.com/" target="_blank" rel="noopener">DevOps Engineer</a></td>
-          <td>Cognizant Softvision</td>
-          <td><span class="badge">careers page</span></td>
-          <td>Cluj-Napoca</td>
-        </tr>
-        <tr data-company="Flutter/Betfair" data-source="careers page">
-          <td class="date">2026-11-14</td>
-          <td><a href="https://www.flutter.com/careers/" target="_blank" rel="noopener">QA Automation Engineer</a></td>
-          <td>Flutter/Betfair</td>
-          <td><span class="badge">careers page</span></td>
-          <td>Cluj-Napoca</td>
-        </tr>
-        <tr data-company="Fortech" data-source="careers page">
-          <td class="date">2026-11-14</td>
-          <td><a href="https://www.fortech.ro/careers/" target="_blank" rel="noopener">Java Developer</a></td>
-          <td>Fortech</td>
-          <td><span class="badge">careers page</span></td>
-          <td>Cluj-Napoca</td>
-        </tr>
-        <tr data-company="UiPath" data-source="careers page">
-          <td class="date">2026-11-13</td>
-          <td><a href="https://www.uipath.com/company/careers/jobs" target="_blank" rel="noopener">Senior Backend Engineer (Go)</a></td>
-          <td>UiPath</td>
-          <td><span class="badge">careers page</span></td>
-          <td>Cluj-Napoca</td>
-        </tr>
-        <tr data-company="Siemens" data-source="careers page">
-          <td class="date">2026-11-13</td>
-          <td><a href="https://jobs.siemens.com/" target="_blank" rel="noopener">Software Engineer - Automotive</a></td>
-          <td>Siemens</td>
-          <td><span class="badge">careers page</span></td>
-          <td>Cluj-Napoca</td>
-        </tr>
-        <tr data-company="Yonder" data-source="careers page">
-          <td class="date">2026-11-13</td>
-          <td><a href="https://www.yonder.ro/careers" target="_blank" rel="noopener">React Developer</a></td>
-          <td>Yonder</td>
-          <td><span class="badge">careers page</span></td>
-          <td>Cluj-Napoca</td>
-        </tr>
-        <tr data-company="Globant" data-source="careers page">
-          <td class="date">2026-11-12</td>
-          <td><a href="https://jobs.globant.com/" target="_blank" rel="noopener">Senior Software Engineer</a></td>
-          <td>Globant</td>
-          <td><span class="badge">careers page</span></td>
-          <td>Cluj-Napoca</td>
-        </tr>
-        <tr data-company="Accenture" data-source="careers page">
-          <td class="date">2026-11-12</td>
-          <td><a href="https://www.accenture.com/ro-en/careers/" target="_blank" rel="noopener">Data Engineer</a></td>
-          <td>Accenture</td>
-          <td><span class="badge">careers page</span></td>
-          <td>Cluj-Napoca</td>
-        </tr>
-        <tr data-company="Ericsson" data-source="careers page">
-          <td class="date">2026-11-12</td>
-          <td><a href="https://jobs.ericsson.com/" target="_blank" rel="noopener">5G Protocol Software Engineer</a></td>
-          <td>Ericsson</td>
-          <td><span class="badge">careers page</span></td>
-          <td>Cluj-Napoca</td>
-        </tr>
-        <tr data-company="METRO Digital" data-source="careers page">
-          <td class="date">2026-11-11</td>
-          <td><a href="https://metrodigital.de/en/career/" target="_blank" rel="noopener">Frontend Developer (Vue.js)</a></td>
-          <td>METRO Digital</td>
-          <td><span class="badge">careers page</span></td>
-          <td>Cluj-Napoca</td>
-        </tr>
-        <tr data-company="Bosch" data-source="careers page">
-          <td class="date">2026-11-11</td>
-          <td><a href="https://www.bosch.com/careers/" target="_blank" rel="noopener">Software Engineer - Machine Learning</a></td>
-          <td>Bosch</td>
-          <td><span class="badge">careers page</span></td>
-          <td>Cluj-Napoca</td>
-        </tr>
-        <tr data-company="Endava" data-source="hipo.ro">
-          <td class="date">2026-11-11</td>
-          <td><a href="https://www.endava.com/en/careers/" target="_blank" rel="noopener">Java Developer</a></td>
-          <td>Endava</td>
-          <td><span class="badge">hipo.ro</span></td>
-          <td>Cluj-Napoca</td>
-        </tr>
-        <tr data-company="N/A" data-source="hipo.ro">
-          <td class="date">2026-11-10</td>
-          <td><a href="https://www.hipo.ro/ro/job/ios-cluj" target="_blank" rel="noopener">iOS Developer</a></td>
-          <td>N/A</td>
-          <td><span class="badge">hipo.ro</span></td>
-          <td>Cluj-Napoca</td>
-        </tr>
-        <tr data-company="N/A" data-source="ejobs.ro">
-          <td class="date">2026-11-10</td>
-          <td><a href="https://www.ejobs.ro/user/locuri-de-munca/angular-cluj" target="_blank" rel="noopener">Angular Developer</a></td>
-          <td>N/A</td>
-          <td><span class="badge">ejobs.ro</span></td>
-          <td>Cluj-Napoca</td>
-        </tr>
-        <tr data-company="N/A" data-source="bestjobs.eu">
-          <td class="date">2026-11-09</td>
-          <td><a href="https://www.bestjobs.eu/ro/locuri-de-munca/devops-cluj" target="_blank" rel="noopener">DevOps / SRE Engineer</a></td>
-          <td>N/A</td>
-          <td><span class="badge">bestjobs.eu</span></td>
-          <td>Cluj-Napoca</td>
-        </tr>
-  </tbody>
-</table>
-<p id="noResults" class="hidden" style="text-align:center;padding:3rem;color:var(--muted);">No jobs match your filters.</p>
+<div class="cards-wrap" id="cardGrid">
+  
+        <div class="card" data-company="UiPath" data-source="careers page" data-text="senior software engineer uipath">
+          <div class="card-left">
+            <div class="avatar">U</div>
+          </div>
+          <div class="card-body">
+            <a class="job-title" href="https://www.uipath.com/company/careers/jobs" target="_blank" rel="noopener">Senior Software Engineer</a>
+            <div class="job-meta">
+              <span class="company-name">UiPath</span>
+              <span class="dot">·</span>
+              <span class="location">📍 Cluj-Napoca</span>
+            </div>
+          </div>
+          <div class="card-right">
+            <span class="badge">careers page</span>
+            <span class="date">2026-11-16</span>
+          </div>
+        </div>
+        <div class="card" data-company="Bosch" data-source="careers page" data-text="embedded c++ developer bosch">
+          <div class="card-left">
+            <div class="avatar">B</div>
+          </div>
+          <div class="card-body">
+            <a class="job-title" href="https://www.bosch.com/careers/" target="_blank" rel="noopener">Embedded C++ Developer</a>
+            <div class="job-meta">
+              <span class="company-name">Bosch</span>
+              <span class="dot">·</span>
+              <span class="location">📍 Cluj-Napoca</span>
+            </div>
+          </div>
+          <div class="card-right">
+            <span class="badge">careers page</span>
+            <span class="date">2026-11-16</span>
+          </div>
+        </div>
+        <div class="card" data-company="Endava" data-source="careers page" data-text="full stack developer (react/java) endava">
+          <div class="card-left">
+            <div class="avatar">E</div>
+          </div>
+          <div class="card-body">
+            <a class="job-title" href="https://www.endava.com/en/careers/" target="_blank" rel="noopener">Full Stack Developer (React/Java)</a>
+            <div class="job-meta">
+              <span class="company-name">Endava</span>
+              <span class="dot">·</span>
+              <span class="location">📍 Cluj-Napoca</span>
+            </div>
+          </div>
+          <div class="card-right">
+            <span class="badge">careers page</span>
+            <span class="date">2026-11-15</span>
+          </div>
+        </div>
+        <div class="card" data-company="Continental" data-source="careers page" data-text="hardware design engineer continental">
+          <div class="card-left">
+            <div class="avatar">C</div>
+          </div>
+          <div class="card-body">
+            <a class="job-title" href="https://www.continental.com/en/career/" target="_blank" rel="noopener">Hardware Design Engineer</a>
+            <div class="job-meta">
+              <span class="company-name">Continental</span>
+              <span class="dot">·</span>
+              <span class="location">📍 Cluj-Napoca</span>
+            </div>
+          </div>
+          <div class="card-right">
+            <span class="badge">careers page</span>
+            <span class="date">2026-11-15</span>
+          </div>
+        </div>
+        <div class="card" data-company="NTT DATA" data-source="careers page" data-text="python backend developer ntt data">
+          <div class="card-left">
+            <div class="avatar">ND</div>
+          </div>
+          <div class="card-body">
+            <a class="job-title" href="https://ro.nttdata.com/ro/cariere" target="_blank" rel="noopener">Python Backend Developer</a>
+            <div class="job-meta">
+              <span class="company-name">NTT DATA</span>
+              <span class="dot">·</span>
+              <span class="location">📍 Cluj-Napoca</span>
+            </div>
+          </div>
+          <div class="card-right">
+            <span class="badge">careers page</span>
+            <span class="date">2026-11-15</span>
+          </div>
+        </div>
+        <div class="card" data-company="Cognizant Softvision" data-source="careers page" data-text="devops engineer cognizant softvision">
+          <div class="card-left">
+            <div class="avatar">CS</div>
+          </div>
+          <div class="card-body">
+            <a class="job-title" href="https://careers.cognizant.com/" target="_blank" rel="noopener">DevOps Engineer</a>
+            <div class="job-meta">
+              <span class="company-name">Cognizant Softvision</span>
+              <span class="dot">·</span>
+              <span class="location">📍 Cluj-Napoca</span>
+            </div>
+          </div>
+          <div class="card-right">
+            <span class="badge">careers page</span>
+            <span class="date">2026-11-14</span>
+          </div>
+        </div>
+        <div class="card" data-company="Flutter/Betfair" data-source="careers page" data-text="qa automation engineer flutter/betfair">
+          <div class="card-left">
+            <div class="avatar">F</div>
+          </div>
+          <div class="card-body">
+            <a class="job-title" href="https://www.flutter.com/careers/" target="_blank" rel="noopener">QA Automation Engineer</a>
+            <div class="job-meta">
+              <span class="company-name">Flutter/Betfair</span>
+              <span class="dot">·</span>
+              <span class="location">📍 Cluj-Napoca</span>
+            </div>
+          </div>
+          <div class="card-right">
+            <span class="badge">careers page</span>
+            <span class="date">2026-11-14</span>
+          </div>
+        </div>
+        <div class="card" data-company="Fortech" data-source="careers page" data-text="java developer fortech">
+          <div class="card-left">
+            <div class="avatar">F</div>
+          </div>
+          <div class="card-body">
+            <a class="job-title" href="https://www.fortech.ro/careers/" target="_blank" rel="noopener">Java Developer</a>
+            <div class="job-meta">
+              <span class="company-name">Fortech</span>
+              <span class="dot">·</span>
+              <span class="location">📍 Cluj-Napoca</span>
+            </div>
+          </div>
+          <div class="card-right">
+            <span class="badge">careers page</span>
+            <span class="date">2026-11-14</span>
+          </div>
+        </div>
+        <div class="card" data-company="UiPath" data-source="careers page" data-text="senior backend engineer (go) uipath">
+          <div class="card-left">
+            <div class="avatar">U</div>
+          </div>
+          <div class="card-body">
+            <a class="job-title" href="https://www.uipath.com/company/careers/jobs" target="_blank" rel="noopener">Senior Backend Engineer (Go)</a>
+            <div class="job-meta">
+              <span class="company-name">UiPath</span>
+              <span class="dot">·</span>
+              <span class="location">📍 Cluj-Napoca</span>
+            </div>
+          </div>
+          <div class="card-right">
+            <span class="badge">careers page</span>
+            <span class="date">2026-11-13</span>
+          </div>
+        </div>
+        <div class="card" data-company="Siemens" data-source="careers page" data-text="software engineer - automotive siemens">
+          <div class="card-left">
+            <div class="avatar">S</div>
+          </div>
+          <div class="card-body">
+            <a class="job-title" href="https://jobs.siemens.com/" target="_blank" rel="noopener">Software Engineer - Automotive</a>
+            <div class="job-meta">
+              <span class="company-name">Siemens</span>
+              <span class="dot">·</span>
+              <span class="location">📍 Cluj-Napoca</span>
+            </div>
+          </div>
+          <div class="card-right">
+            <span class="badge">careers page</span>
+            <span class="date">2026-11-13</span>
+          </div>
+        </div>
+        <div class="card" data-company="Yonder" data-source="careers page" data-text="react developer yonder">
+          <div class="card-left">
+            <div class="avatar">Y</div>
+          </div>
+          <div class="card-body">
+            <a class="job-title" href="https://www.yonder.ro/careers" target="_blank" rel="noopener">React Developer</a>
+            <div class="job-meta">
+              <span class="company-name">Yonder</span>
+              <span class="dot">·</span>
+              <span class="location">📍 Cluj-Napoca</span>
+            </div>
+          </div>
+          <div class="card-right">
+            <span class="badge">careers page</span>
+            <span class="date">2026-11-13</span>
+          </div>
+        </div>
+        <div class="card" data-company="Globant" data-source="careers page" data-text="senior software engineer globant">
+          <div class="card-left">
+            <div class="avatar">G</div>
+          </div>
+          <div class="card-body">
+            <a class="job-title" href="https://jobs.globant.com/" target="_blank" rel="noopener">Senior Software Engineer</a>
+            <div class="job-meta">
+              <span class="company-name">Globant</span>
+              <span class="dot">·</span>
+              <span class="location">📍 Cluj-Napoca</span>
+            </div>
+          </div>
+          <div class="card-right">
+            <span class="badge">careers page</span>
+            <span class="date">2026-11-12</span>
+          </div>
+        </div>
+        <div class="card" data-company="Accenture" data-source="careers page" data-text="data engineer accenture">
+          <div class="card-left">
+            <div class="avatar">A</div>
+          </div>
+          <div class="card-body">
+            <a class="job-title" href="https://www.accenture.com/ro-en/careers/" target="_blank" rel="noopener">Data Engineer</a>
+            <div class="job-meta">
+              <span class="company-name">Accenture</span>
+              <span class="dot">·</span>
+              <span class="location">📍 Cluj-Napoca</span>
+            </div>
+          </div>
+          <div class="card-right">
+            <span class="badge">careers page</span>
+            <span class="date">2026-11-12</span>
+          </div>
+        </div>
+        <div class="card" data-company="Ericsson" data-source="careers page" data-text="5g protocol software engineer ericsson">
+          <div class="card-left">
+            <div class="avatar">E</div>
+          </div>
+          <div class="card-body">
+            <a class="job-title" href="https://jobs.ericsson.com/" target="_blank" rel="noopener">5G Protocol Software Engineer</a>
+            <div class="job-meta">
+              <span class="company-name">Ericsson</span>
+              <span class="dot">·</span>
+              <span class="location">📍 Cluj-Napoca</span>
+            </div>
+          </div>
+          <div class="card-right">
+            <span class="badge">careers page</span>
+            <span class="date">2026-11-12</span>
+          </div>
+        </div>
+        <div class="card" data-company="METRO Digital" data-source="careers page" data-text="frontend developer (vue.js) metro digital">
+          <div class="card-left">
+            <div class="avatar">MD</div>
+          </div>
+          <div class="card-body">
+            <a class="job-title" href="https://metrodigital.de/en/career/" target="_blank" rel="noopener">Frontend Developer (Vue.js)</a>
+            <div class="job-meta">
+              <span class="company-name">METRO Digital</span>
+              <span class="dot">·</span>
+              <span class="location">📍 Cluj-Napoca</span>
+            </div>
+          </div>
+          <div class="card-right">
+            <span class="badge">careers page</span>
+            <span class="date">2026-11-11</span>
+          </div>
+        </div>
+        <div class="card" data-company="Bosch" data-source="careers page" data-text="software engineer - machine learning bosch">
+          <div class="card-left">
+            <div class="avatar">B</div>
+          </div>
+          <div class="card-body">
+            <a class="job-title" href="https://www.bosch.com/careers/" target="_blank" rel="noopener">Software Engineer - Machine Learning</a>
+            <div class="job-meta">
+              <span class="company-name">Bosch</span>
+              <span class="dot">·</span>
+              <span class="location">📍 Cluj-Napoca</span>
+            </div>
+          </div>
+          <div class="card-right">
+            <span class="badge">careers page</span>
+            <span class="date">2026-11-11</span>
+          </div>
+        </div>
+        <div class="card" data-company="Endava" data-source="hipo.ro" data-text="java developer endava">
+          <div class="card-left">
+            <div class="avatar">E</div>
+          </div>
+          <div class="card-body">
+            <a class="job-title" href="https://www.endava.com/en/careers/" target="_blank" rel="noopener">Java Developer</a>
+            <div class="job-meta">
+              <span class="company-name">Endava</span>
+              <span class="dot">·</span>
+              <span class="location">📍 Cluj-Napoca</span>
+            </div>
+          </div>
+          <div class="card-right">
+            <span class="badge">hipo.ro</span>
+            <span class="date">2026-11-11</span>
+          </div>
+        </div>
+        <div class="card" data-company="N/A" data-source="hipo.ro" data-text="ios developer n/a">
+          <div class="card-left">
+            <div class="avatar">N</div>
+          </div>
+          <div class="card-body">
+            <a class="job-title" href="https://www.hipo.ro/" target="_blank" rel="noopener">iOS Developer</a>
+            <div class="job-meta">
+              <span class="company-name">N/A</span>
+              <span class="dot">·</span>
+              <span class="location">📍 Cluj-Napoca</span>
+            </div>
+          </div>
+          <div class="card-right">
+            <span class="badge">hipo.ro</span>
+            <span class="date">2026-11-10</span>
+          </div>
+        </div>
+        <div class="card" data-company="N/A" data-source="ejobs.ro" data-text="angular developer n/a">
+          <div class="card-left">
+            <div class="avatar">N</div>
+          </div>
+          <div class="card-body">
+            <a class="job-title" href="https://www.ejobs.ro/" target="_blank" rel="noopener">Angular Developer</a>
+            <div class="job-meta">
+              <span class="company-name">N/A</span>
+              <span class="dot">·</span>
+              <span class="location">📍 Cluj-Napoca</span>
+            </div>
+          </div>
+          <div class="card-right">
+            <span class="badge">ejobs.ro</span>
+            <span class="date">2026-11-10</span>
+          </div>
+        </div>
+        <div class="card" data-company="N/A" data-source="bestjobs.eu" data-text="devops / sre engineer n/a">
+          <div class="card-left">
+            <div class="avatar">N</div>
+          </div>
+          <div class="card-body">
+            <a class="job-title" href="https://www.bestjobs.eu/" target="_blank" rel="noopener">DevOps / SRE Engineer</a>
+            <div class="job-meta">
+              <span class="company-name">N/A</span>
+              <span class="dot">·</span>
+              <span class="location">📍 Cluj-Napoca</span>
+            </div>
+          </div>
+          <div class="card-right">
+            <span class="badge">bestjobs.eu</span>
+            <span class="date">2026-11-09</span>
+          </div>
+        </div>
+  <p id="noResults" class="hidden">No jobs match your filters — try a different keyword.</p>
 </div>
 
-<div class="footer">
-  Data scraped from public job boards and company career pages. · 
-  <a href="jobs.json" target="_blank">Raw JSON</a> ·
-  Built with ❤️ for the Cluj tech community
-</div>
+<footer>
+  Data sourced from public job boards &amp; company career pages &nbsp;·&nbsp;
+  <a href="jobs.json" target="_blank">Raw JSON</a> &nbsp;·&nbsp;
+  Built for the Cluj tech community
+</footer>
 
 <script>
   function filter() {
     const q = document.getElementById('search').value.toLowerCase();
     const co = document.getElementById('companyFilter').value;
     const src = document.getElementById('sourceFilter').value;
-    const rows = document.querySelectorAll('#jobTable tbody tr');
+    const cards = document.querySelectorAll('.card');
     let visible = 0;
-    rows.forEach(row => {
-      const text = row.textContent.toLowerCase();
-      const company = row.dataset.company;
-      const source = row.dataset.source;
+    cards.forEach(card => {
+      const text = card.dataset.text || card.textContent.toLowerCase();
+      const company = card.dataset.company;
+      const source = card.dataset.source;
       const show = (!q || text.includes(q))
                 && (!co || company === co)
                 && (!src || source === src);
-      row.classList.toggle('hidden', !show);
+      card.classList.toggle('hidden', !show);
       if (show) visible++;
     });
-    document.getElementById('count').textContent = visible + ' jobs shown';
+    document.getElementById('count').textContent = visible + ' positions';
     document.getElementById('noResults').classList.toggle('hidden', visible > 0);
   }
   filter();

@@ -407,16 +407,28 @@ def generate_html(jobs):
     companies = sorted(set(j["company"] for j in jobs))
     sources = sorted(set(j["source"] for j in jobs))
 
-    rows = ""
+    # Build job cards
+    cards = ""
     for j in jobs:
-        rows += f"""
-        <tr data-company="{j['company']}" data-source="{j['source']}">
-          <td class="date">{j['date']}</td>
-          <td><a href="{j['url']}" target="_blank" rel="noopener">{j['title']}</a></td>
-          <td>{j['company']}</td>
-          <td><span class="badge">{j['source']}</span></td>
-          <td>{j.get('location','Cluj-Napoca')}</td>
-        </tr>"""
+        initials = "".join(w[0] for w in j["company"].split()[:2] if w).upper() or "?"
+        cards += f"""
+        <div class="card" data-company="{j['company']}" data-source="{j['source']}" data-text="{j['title'].lower()} {j['company'].lower()}">
+          <div class="card-left">
+            <div class="avatar">{initials}</div>
+          </div>
+          <div class="card-body">
+            <a class="job-title" href="{j['url']}" target="_blank" rel="noopener">{j['title']}</a>
+            <div class="job-meta">
+              <span class="company-name">{j['company']}</span>
+              <span class="dot">·</span>
+              <span class="location">📍 {j.get('location','Cluj-Napoca')}</span>
+            </div>
+          </div>
+          <div class="card-right">
+            <span class="badge">{j['source']}</span>
+            <span class="date">{j['date']}</span>
+          </div>
+        </div>"""
 
     company_opts = "\n".join(
         f'<option value="{c}">{c}</option>' for c in companies
@@ -425,110 +437,353 @@ def generate_html(jobs):
         f'<option value="{s}">{s}</option>' for s in sources
     )
 
-    updated = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    updated = datetime.now(timezone.utc).strftime("%d %b %Y, %H:%M UTC")
 
     html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Cluj-Napoca Tech Jobs</title>
+<title>Cluj Tech Jobs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
   :root {{
-    --bg: #0f1117; --surface: #1a1d2e; --border: #2a2d3e;
-    --accent: #6366f1; --accent2: #22d3ee;
-    --text: #e2e8f0; --muted: #94a3b8;
+    --burgundy:   #6B1F2A;
+    --burgundy-d: #4E1620;
+    --burgundy-l: #8B3040;
+    --cream:      #F5EFE6;
+    --cream-d:    #EDE4D6;
+    --cream-dd:   #D9CEBD;
+    --text:       #2C1810;
+    --text-soft:  #6B5B52;
+    --white:      #FDFAF6;
+    --shadow:     rgba(44,24,16,.10);
+    --radius:     14px;
   }}
+
   * {{ box-sizing: border-box; margin: 0; padding: 0; }}
-  body {{ background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; }}
-  header {{ background: var(--surface); border-bottom: 1px solid var(--border); padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }}
-  header h1 {{ font-size: 1.5rem; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }}
-  .meta {{ color: var(--muted); font-size: 0.85rem; }}
-  .meta strong {{ color: var(--accent2); }}
-  .controls {{ padding: 1.5rem 2rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; background: var(--surface); border-bottom: 1px solid var(--border); }}
-  input, select {{ background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 0.5rem 0.75rem; border-radius: 8px; font-size: 0.9rem; outline: none; transition: border-color .2s; }}
-  input:focus, select:focus {{ border-color: var(--accent); }}
-  input {{ min-width: 240px; }}
-  #count {{ color: var(--muted); font-size: 0.85rem; margin-left: auto; }}
-  .table-wrap {{ overflow-x: auto; padding: 0 2rem 2rem; }}
-  table {{ width: 100%; border-collapse: collapse; margin-top: 1.5rem; }}
-  th {{ text-align: left; padding: 0.75rem 1rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--bg); }}
-  td {{ padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); font-size: 0.9rem; vertical-align: middle; }}
-  td.date {{ color: var(--muted); white-space: nowrap; font-size: 0.8rem; }}
-  tr:hover td {{ background: var(--surface); }}
-  a {{ color: var(--accent); text-decoration: none; }}
-  a:hover {{ color: var(--accent2); text-decoration: underline; }}
-  .badge {{ background: rgba(99,102,241,.15); color: var(--accent); border: 1px solid rgba(99,102,241,.3); padding: .2rem .6rem; border-radius: 999px; font-size: 0.75rem; white-space: nowrap; }}
+
+  body {{
+    background: var(--cream);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+    min-height: 100vh;
+  }}
+
+  /* ── Header ── */
+  header {{
+    background: var(--burgundy-d);
+    padding: 2.5rem 3rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }}
+  header::after {{
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 0; right: 0;
+    height: 32px;
+    background: var(--cream);
+    clip-path: ellipse(55% 100% at 50% 100%);
+  }}
+  .header-inner {{
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }}
+  header h1 {{
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: var(--cream);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }}
+  header h1 span {{
+    color: var(--cream-dd);
+    font-weight: 400;
+    display: block;
+    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+  }}
+  .header-meta {{
+    text-align: right;
+    color: rgba(245,239,230,.6);
+    font-size: 0.8rem;
+    line-height: 1.6;
+  }}
+  .header-meta strong {{ color: var(--cream); }}
+
+  /* ── Controls ── */
+  .controls-wrap {{
+    background: var(--white);
+    border-bottom: 1px solid var(--cream-dd);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px var(--shadow);
+  }}
+  .controls {{
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1rem 3rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+  }}
+  .search-wrap {{
+    position: relative;
+    flex: 1;
+    min-width: 220px;
+  }}
+  .search-wrap svg {{
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-soft);
+    pointer-events: none;
+  }}
+  input[type=search] {{
+    width: 100%;
+    padding: 0.6rem 0.75rem 0.6rem 2.3rem;
+    border: 1.5px solid var(--cream-dd);
+    border-radius: 999px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    color: var(--text);
+    background: var(--cream);
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+    -webkit-appearance: none;
+  }}
+  input[type=search]:focus {{
+    border-color: var(--burgundy);
+    box-shadow: 0 0 0 3px rgba(107,31,42,.12);
+  }}
+  select {{
+    padding: 0.6rem 2rem 0.6rem 0.9rem;
+    border: 1.5px solid var(--cream-dd);
+    border-radius: 999px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    color: var(--text);
+    background: var(--cream) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B5B52' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 0.7rem center;
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+    cursor: pointer;
+    transition: border-color .2s;
+  }}
+  select:focus {{ border-color: var(--burgundy); }}
+  #count {{
+    margin-left: auto;
+    font-size: 0.8rem;
+    color: var(--text-soft);
+    white-space: nowrap;
+    font-weight: 500;
+  }}
+
+  /* ── Cards ── */
+  .cards-wrap {{
+    max-width: 1100px;
+    margin: 2rem auto;
+    padding: 0 3rem 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }}
+
+  .card {{
+    background: var(--white);
+    border: 1px solid var(--cream-dd);
+    border-radius: var(--radius);
+    padding: 1.1rem 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+    transition: box-shadow .2s, border-color .2s, transform .15s;
+    cursor: default;
+  }}
+  .card:hover {{
+    box-shadow: 0 4px 20px var(--shadow);
+    border-color: var(--burgundy-l);
+    transform: translateY(-1px);
+  }}
+
+  .avatar {{
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--burgundy), var(--burgundy-l));
+    color: var(--cream);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: 0.03em;
+  }}
+
+  .card-body {{
+    flex: 1;
+    min-width: 0;
+  }}
+  .job-title {{
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0.25rem;
+    transition: color .15s;
+  }}
+  .job-title:hover {{
+    color: var(--burgundy);
+    text-decoration: underline;
+    text-decoration-color: var(--burgundy-l);
+  }}
+  .job-meta {{
+    font-size: 0.8rem;
+    color: var(--text-soft);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }}
+  .company-name {{ font-weight: 500; }}
+  .dot {{ color: var(--cream-dd); }}
+
+  .card-right {{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.4rem;
+    flex-shrink: 0;
+  }}
+  .badge {{
+    background: rgba(107,31,42,.08);
+    color: var(--burgundy);
+    border: 1px solid rgba(107,31,42,.18);
+    padding: .2rem .65rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 500;
+    white-space: nowrap;
+  }}
+  .date {{
+    font-size: 0.75rem;
+    color: var(--text-soft);
+    white-space: nowrap;
+  }}
+
   .hidden {{ display: none !important; }}
-  @media (max-width: 600px) {{ .controls {{ flex-direction: column; }} input {{ min-width: 100%; }} }}
-  .footer {{ text-align: center; padding: 2rem; color: var(--muted); font-size: 0.8rem; border-top: 1px solid var(--border); }}
-  .pill {{ display: inline-block; background: rgba(34,211,238,.1); color: var(--accent2); padding: .15rem .5rem; border-radius: 999px; font-size: .75rem; margin-left: .5rem; }}
+
+  #noResults {{
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--text-soft);
+    font-size: 0.95rem;
+  }}
+
+  /* ── Footer ── */
+  footer {{
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-soft);
+    font-size: 0.78rem;
+    border-top: 1px solid var(--cream-dd);
+  }}
+  footer a {{ color: var(--burgundy); text-decoration: none; }}
+  footer a:hover {{ text-decoration: underline; }}
+
+  /* ── Responsive ── */
+  @media (max-width: 700px) {{
+    header {{ padding: 2rem 1.5rem 1.75rem; }}
+    header h1 {{ font-size: 1.8rem; }}
+    .header-meta {{ display: none; }}
+    .controls {{ padding: 0.75rem 1.5rem; }}
+    .cards-wrap {{ padding: 1rem 1.5rem 2rem; }}
+    .card-right .badge {{ display: none; }}
+  }}
 </style>
 </head>
 <body>
+
 <header>
-  <div>
-    <h1>🏔️ Cluj-Napoca Tech Jobs</h1>
-    <p class="meta">Last updated: <strong>{updated}</strong> · <strong>{len(jobs)}</strong> positions</p>
+  <div class="header-inner">
+    <h1>
+      <span>Cluj-Napoca</span>
+      Tech Jobs Board
+    </h1>
+    <div class="header-meta">
+      Updated <strong>{updated}</strong><br/>
+      <strong>{len(jobs)}</strong> open positions · auto-refreshed daily
+    </div>
   </div>
-  <div class="meta">Auto-refreshed daily via GitHub Actions</div>
 </header>
 
-<div class="controls">
-  <input id="search" type="search" placeholder="🔍 Filter by title, company, keyword…" oninput="filter()"/>
-  <select id="companyFilter" onchange="filter()">
-    <option value="">All companies</option>
-    {company_opts}
-  </select>
-  <select id="sourceFilter" onchange="filter()">
-    <option value="">All sources</option>
-    {source_opts}
-  </select>
-  <span id="count"></span>
+<div class="controls-wrap">
+  <div class="controls">
+    <div class="search-wrap">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="search" type="search" placeholder="Search by title, company, keyword…" oninput="filter()"/>
+    </div>
+    <select id="companyFilter" onchange="filter()">
+      <option value="">All companies</option>
+      {company_opts}
+    </select>
+    <select id="sourceFilter" onchange="filter()">
+      <option value="">All sources</option>
+      {source_opts}
+    </select>
+    <span id="count"></span>
+  </div>
 </div>
 
-<div class="table-wrap">
-<table id="jobTable">
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>Job Title</th>
-      <th>Company</th>
-      <th>Source</th>
-      <th>Location</th>
-    </tr>
-  </thead>
-  <tbody>
-    {rows}
-  </tbody>
-</table>
-<p id="noResults" class="hidden" style="text-align:center;padding:3rem;color:var(--muted);">No jobs match your filters.</p>
+<div class="cards-wrap" id="cardGrid">
+  {cards}
+  <p id="noResults" class="hidden">No jobs match your filters — try a different keyword.</p>
 </div>
 
-<div class="footer">
-  Data scraped from public job boards and company career pages. · 
-  <a href="jobs.json" target="_blank">Raw JSON</a> ·
-  Built with ❤️ for the Cluj tech community
-</div>
+<footer>
+  Data sourced from public job boards &amp; company career pages &nbsp;·&nbsp;
+  <a href="jobs.json" target="_blank">Raw JSON</a> &nbsp;·&nbsp;
+  Built for the Cluj tech community
+</footer>
 
 <script>
   function filter() {{
     const q = document.getElementById('search').value.toLowerCase();
     const co = document.getElementById('companyFilter').value;
     const src = document.getElementById('sourceFilter').value;
-    const rows = document.querySelectorAll('#jobTable tbody tr');
+    const cards = document.querySelectorAll('.card');
     let visible = 0;
-    rows.forEach(row => {{
-      const text = row.textContent.toLowerCase();
-      const company = row.dataset.company;
-      const source = row.dataset.source;
+    cards.forEach(card => {{
+      const text = card.dataset.text || card.textContent.toLowerCase();
+      const company = card.dataset.company;
+      const source = card.dataset.source;
       const show = (!q || text.includes(q))
                 && (!co || company === co)
                 && (!src || source === src);
-      row.classList.toggle('hidden', !show);
+      card.classList.toggle('hidden', !show);
       if (show) visible++;
     }});
-    document.getElementById('count').textContent = visible + ' jobs shown';
+    document.getElementById('count').textContent = visible + ' positions';
     document.getElementById('noResults').classList.toggle('hidden', visible > 0);
   }}
   filter();
