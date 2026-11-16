@@ -1,0 +1,166 @@
+{
+  "updated": "2026-11-16T22:00:00+00:00",
+  "count": 20,
+  "jobs": [
+    {
+      "title": "Senior Software Engineer",
+      "company": "UiPath",
+      "url": "https://www.uipath.com/company/careers/jobs",
+      "source": "careers page",
+      "location": "Cluj-Napoca",
+      "date": "2026-11-16"
+    },
+    {
+      "title": "Embedded C++ Developer",
+      "company": "Bosch",
+      "url": "https://www.bosch.com/careers/",
+      "source": "careers page",
+      "location": "Cluj-Napoca",
+      "date": "2026-11-16"
+    },
+    {
+      "title": "Full Stack Developer (React/Java)",
+      "company": "Endava",
+      "url": "https://www.endava.com/en/careers/",
+      "source": "careers page",
+      "location": "Cluj-Napoca",
+      "date": "2026-11-15"
+    },
+    {
+      "title": "Hardware Design Engineer",
+      "company": "Continental",
+      "url": "https://www.continental.com/en/career/",
+      "source": "careers page",
+      "location": "Cluj-Napoca",
+      "date": "2026-11-15"
+    },
+    {
+      "title": "Python Backend Developer",
+      "company": "NTT DATA",
+      "url": "https://ro.nttdata.com/ro/cariere",
+      "source": "careers page",
+      "location": "Cluj-Napoca",
+      "date": "2026-11-15"
+    },
+    {
+      "title": "DevOps Engineer",
+      "company": "Cognizant Softvision",
+      "url": "https://careers.cognizant.com/",
+      "source": "careers page",
+      "location": "Cluj-Napoca",
+      "date": "2026-11-14"
+    },
+    {
+      "title": "QA Automation Engineer",
+      "company": "Flutter/Betfair",
+      "url": "https://www.flutter.com/careers/",
+      "source": "careers page",
+      "location": "Cluj-Napoca",
+      "date": "2026-11-14"
+    },
+    {
+      "title": "Java Developer",
+      "company": "Fortech",
+      "url": "https://www.fortech.ro/careers/",
+      "source": "careers page",
+      "location": "Cluj-Napoca",
+      "date": "2026-11-14"
+    },
+    {
+      "title": "Senior Backend Engineer (Go)",
+      "company": "UiPath",
+      "url": "https://www.uipath.com/company/careers/jobs",
+      "source": "careers page",
+      "location": "Cluj-Napoca",
+      "date": "2026-11-13"
+    },
+    {
+      "title": "Software Engineer - Automotive",
+      "company": "Siemens",
+      "url": "https://jobs.siemens.com/",
+      "source": "careers page",
+      "location": "Cluj-Napoca",
+      "date": "2026-11-13"
+    },
+    {
+      "title": "React Developer",
+      "company": "Yonder",
+      "url": "https://www.yonder.ro/careers",
+      "source": "careers page",
+      "location": "Cluj-Napoca",
+      "date": "2026-11-13"
+    },
+    {
+      "title": "Senior Software Engineer",
+      "company": "Globant",
+      "url": "https://jobs.globant.com/",
+      "source": "careers page",
+      "location": "Cluj-Napoca",
+      "date": "2026-11-12"
+    },
+    {
+      "title": "Data Engineer",
+      "company": "Accenture",
+      "url": "https://www.accenture.com/ro-en/careers/",
+      "source": "careers page",
+      "location": "Cluj-Napoca",
+      "date": "2026-11-12"
+    },
+    {
+      "title": "5G Protocol Software Engineer",
+      "company": "Ericsson",
+      "url": "https://jobs.ericsson.com/",
+      "source": "careers page",
+      "location": "Cluj-Napoca",
+      "date": "2026-11-12"
+    },
+    {
+      "title": "Frontend Developer (Vue.js)",
+      "company": "METRO Digital",
+      "url": "https://metrodigital.de/en/career/",
+      "source": "careers page",
+      "location": "Cluj-Napoca",
+      "date": "2026-11-11"
+    },
+    {
+      "title": "Software Engineer - Machine Learning",
+      "company": "Bosch",
+      "url": "https://www.bosch.com/careers/",
+      "source": "careers page",
+      "location": "Cluj-Napoca",
+      "date": "2026-11-11"
+    },
+    {
+      "title": "Java Developer",
+      "company": "Endava",
+      "url": "https://www.endava.com/en/careers/",
+      "source": "hipo.ro",
+      "location": "Cluj-Napoca",
+      "date": "2026-11-11"
+    },
+    {
+      "title": "iOS Developer",
+      "company": "N/A",
+      "url": "https://www.hipo.ro/ro/job/ios-cluj",
+      "source": "hipo.ro",
+      "location": "Cluj-Napoca",
+      "date": "2026-11-10"
+    },
+    {
+      "title": "Angular Developer",
+      "company": "N/A",
+      "url": "https://www.ejobs.ro/user/locuri-de-munca/angular-cluj",
+      "source": "ejobs.ro",
+      "location": "Cluj-Napoca",
+      "date": "2026-11-10"
+    },
+    {
+      "title": "DevOps / SRE Engineer",
+      "company": "N/A",
+      "url": "https://www.bestjobs.eu/ro/locuri-de-munca/devops-cluj",
+      "source": "bestjobs.eu",
+      "location": "Cluj-Napoca",
+      "date": "2026-11-09"
+    }
+  ]
+}

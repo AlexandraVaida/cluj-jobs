@@ -1,0 +1,39 @@
+name: Scrape Cluj-Napoca Tech Jobs
+
+on:
+  schedule:
+    # Runs every day at 06:00 UTC (08:00 Romania time)
+    - cron: '0 6 * * *'
+  workflow_dispatch:  # Also allows manual trigger from GitHub UI
+
+permissions:
+  contents: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run scraper
+        run: python scraper.py
+
+      - name: Show job count
+        run: |
+          echo "Jobs collected:"
+          python -c "import json; d=json.load(open('docs/jobs.json')); print(d['count'], 'jobs as of', d['updated'])"
+
+      - name: Commit and push updated data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/jobs.json docs/index.html
+          git diff --staged --quiet || git commit -m "chore: update job listings $(date -u +%Y-%m-%d)"
+          git push

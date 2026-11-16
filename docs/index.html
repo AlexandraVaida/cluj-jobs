@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Cluj-Napoca Tech Jobs</title>
+<style>
+  :root {
+    --bg: #0f1117; --surface: #1a1d2e; --border: #2a2d3e;
+    --accent: #6366f1; --accent2: #22d3ee;
+    --text: #e2e8f0; --muted: #94a3b8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; }
+  header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+  header h1 { font-size: 1.5rem; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .meta { color: var(--muted); font-size: 0.85rem; }
+  .meta strong { color: var(--accent2); }
+  .controls { padding: 1.5rem 2rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; background: var(--surface); border-bottom: 1px solid var(--border); }
+  input, select { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 0.5rem 0.75rem; border-radius: 8px; font-size: 0.9rem; outline: none; transition: border-color .2s; }
+  input:focus, select:focus { border-color: var(--accent); }
+  input { min-width: 240px; }
+  #count { color: var(--muted); font-size: 0.85rem; margin-left: auto; }
+  .table-wrap { overflow-x: auto; padding: 0 2rem 2rem; }
+  table { width: 100%; border-collapse: collapse; margin-top: 1.5rem; }
+  th { text-align: left; padding: 0.75rem 1rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--bg); }
+  td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); font-size: 0.9rem; vertical-align: middle; }
+  td.date { color: var(--muted); white-space: nowrap; font-size: 0.8rem; }
+  tr:hover td { background: var(--surface); }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { color: var(--accent2); text-decoration: underline; }
+  .badge { background: rgba(99,102,241,.15); color: var(--accent); border: 1px solid rgba(99,102,241,.3); padding: .2rem .6rem; border-radius: 999px; font-size: 0.75rem; white-space: nowrap; }
+  .hidden { display: none !important; }
+  @media (max-width: 600px) { .controls { flex-direction: column; } input { min-width: 100%; } }
+  .footer { text-align: center; padding: 2rem; color: var(--muted); font-size: 0.8rem; border-top: 1px solid var(--border); }
+  .pill { display: inline-block; background: rgba(34,211,238,.1); color: var(--accent2); padding: .15rem .5rem; border-radius: 999px; font-size: .75rem; margin-left: .5rem; }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>🏔️ Cluj-Napoca Tech Jobs</h1>
+    <p class="meta">Last updated: <strong>2026-11-16 22:06 UTC</strong> · <strong>20</strong> positions</p>
+  </div>
+  <div class="meta">Auto-refreshed daily via GitHub Actions</div>
+</header>
+
+<div class="controls">
+  <input id="search" type="search" placeholder="🔍 Filter by title, company, keyword…" oninput="filter()"/>
+  <select id="companyFilter" onchange="filter()">
+    <option value="">All companies</option>
+    <option value="Accenture">Accenture</option>
+<option value="Bosch">Bosch</option>
+<option value="Cognizant Softvision">Cognizant Softvision</option>
+<option value="Continental">Continental</option>
+<option value="Endava">Endava</option>
+<option value="Ericsson">Ericsson</option>
+<option value="Flutter/Betfair">Flutter/Betfair</option>
+<option value="Fortech">Fortech</option>
+<option value="Globant">Globant</option>
+<option value="METRO Digital">METRO Digital</option>
+<option value="N/A">N/A</option>
+<option value="NTT DATA">NTT DATA</option>
+<option value="Siemens">Siemens</option>
+<option value="UiPath">UiPath</option>
+<option value="Yonder">Yonder</option>
+  </select>
+  <select id="sourceFilter" onchange="filter()">
+    <option value="">All sources</option>
+    <option value="bestjobs.eu">bestjobs.eu</option>
+<option value="careers page">careers page</option>
+<option value="ejobs.ro">ejobs.ro</option>
+<option value="hipo.ro">hipo.ro</option>
+  </select>
+  <span id="count"></span>
+</div>
+
+<div class="table-wrap">
+<table id="jobTable">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Job Title</th>
+      <th>Company</th>
+      <th>Source</th>
+      <th>Location</th>
+    </tr>
+  </thead>
+  <tbody>
+    
+        <tr data-company="UiPath" data-source="careers page">
+          <td class="date">2026-11-16</td>
+          <td><a href="https://www.uipath.com/company/careers/jobs" target="_blank" rel="noopener">Senior Software Engineer</a></td>
+          <td>UiPath</td>
+          <td><span class="badge">careers page</span></td>
+          <td>Cluj-Napoca</td>
+        </tr>
+        <tr data-company="Bosch" data-source="careers page">
+          <td class="date">2026-11-16</td>
+          <td><a href="https://www.bosch.com/careers/" target="_blank" rel="noopener">Embedded C++ Developer</a></td>
+          <td>Bosch</td>
+          <td><span class="badge">careers page</span></td>
+          <td>Cluj-Napoca</td>
+        </tr>
+        <tr data-company="Endava" data-source="careers page">
+          <td class="date">2026-11-15</td>
+          <td><a href="https://www.endava.com/en/careers/" target="_blank" rel="noopener">Full Stack Developer (React/Java)</a></td>
+          <td>Endava</td>
+          <td><span class="badge">careers page</span></td>
+          <td>Cluj-Napoca</td>
+        </tr>
+        <tr data-company="Continental" data-source="careers page">
+          <td class="date">2026-11-15</td>
+          <td><a href="https://www.continental.com/en/career/" target="_blank" rel="noopener">Hardware Design Engineer</a></td>
+          <td>Continental</td>
+          <td><span class="badge">careers page</span></td>
+          <td>Cluj-Napoca</td>
+        </tr>
+        <tr data-company="NTT DATA" data-source="careers page">
+          <td class="date">2026-11-15</td>
+          <td><a href="https://ro.nttdata.com/ro/cariere" target="_blank" rel="noopener">Python Backend Developer</a></td>
+          <td>NTT DATA</td>
+          <td><span class="badge">careers page</span></td>
+          <td>Cluj-Napoca</td>
+        </tr>
+        <tr data-company="Cognizant Softvision" data-source="careers page">
+          <td class="date">2026-11-14</td>
+          <td><a href="https://careers.cognizant.com/" target="_blank" rel="noopener">DevOps Engineer</a></td>
+          <td>Cognizant Softvision</td>
+          <td><span class="badge">careers page</span></td>
+          <td>Cluj-Napoca</td>
+        </tr>
+        <tr data-company="Flutter/Betfair" data-source="careers page">
+          <td class="date">2026-11-14</td>
+          <td><a href="https://www.flutter.com/careers/" target="_blank" rel="noopener">QA Automation Engineer</a></td>
+          <td>Flutter/Betfair</td>
+          <td><span class="badge">careers page</span></td>
+          <td>Cluj-Napoca</td>
+        </tr>
+        <tr data-company="Fortech" data-source="careers page">
+          <td class="date">2026-11-14</td>
+          <td><a href="https://www.fortech.ro/careers/" target="_blank" rel="noopener">Java Developer</a></td>
+          <td>Fortech</td>
+          <td><span class="badge">careers page</span></td>
+          <td>Cluj-Napoca</td>
+        </tr>
+        <tr data-company="UiPath" data-source="careers page">
+          <td class="date">2026-11-13</td>
+          <td><a href="https://www.uipath.com/company/careers/jobs" target="_blank" rel="noopener">Senior Backend Engineer (Go)</a></td>
+          <td>UiPath</td>
+          <td><span class="badge">careers page</span></td>
+          <td>Cluj-Napoca</td>
+        </tr>
+        <tr data-company="Siemens" data-source="careers page">
+          <td class="date">2026-11-13</td>
+          <td><a href="https://jobs.siemens.com/" target="_blank" rel="noopener">Software Engineer - Automotive</a></td>
+          <td>Siemens</td>
+          <td><span class="badge">careers page</span></td>
+          <td>Cluj-Napoca</td>
+        </tr>
+        <tr data-company="Yonder" data-source="careers page">
+          <td class="date">2026-11-13</td>
+          <td><a href="https://www.yonder.ro/careers" target="_blank" rel="noopener">React Developer</a></td>
+          <td>Yonder</td>
+          <td><span class="badge">careers page</span></td>
+          <td>Cluj-Napoca</td>
+        </tr>
+        <tr data-company="Globant" data-source="careers page">
+          <td class="date">2026-11-12</td>
+          <td><a href="https://jobs.globant.com/" target="_blank" rel="noopener">Senior Software Engineer</a></td>
+          <td>Globant</td>
+          <td><span class="badge">careers page</span></td>
+          <td>Cluj-Napoca</td>
+        </tr>
+        <tr data-company="Accenture" data-source="careers page">
+          <td class="date">2026-11-12</td>
+          <td><a href="https://www.accenture.com/ro-en/careers/" target="_blank" rel="noopener">Data Engineer</a></td>
+          <td>Accenture</td>
+          <td><span class="badge">careers page</span></td>
+          <td>Cluj-Napoca</td>
+        </tr>
+        <tr data-company="Ericsson" data-source="careers page">
+          <td class="date">2026-11-12</td>
+          <td><a href="https://jobs.ericsson.com/" target="_blank" rel="noopener">5G Protocol Software Engineer</a></td>
+          <td>Ericsson</td>
+          <td><span class="badge">careers page</span></td>
+          <td>Cluj-Napoca</td>
+        </tr>
+        <tr data-company="METRO Digital" data-source="careers page">
+          <td class="date">2026-11-11</td>
+          <td><a href="https://metrodigital.de/en/career/" target="_blank" rel="noopener">Frontend Developer (Vue.js)</a></td>
+          <td>METRO Digital</td>
+          <td><span class="badge">careers page</span></td>
+          <td>Cluj-Napoca</td>
+        </tr>
+        <tr data-company="Bosch" data-source="careers page">
+          <td class="date">2026-11-11</td>
+          <td><a href="https://www.bosch.com/careers/" target="_blank" rel="noopener">Software Engineer - Machine Learning</a></td>
+          <td>Bosch</td>
+          <td><span class="badge">careers page</span></td>
+          <td>Cluj-Napoca</td>
+        </tr>
+        <tr data-company="Endava" data-source="hipo.ro">
+          <td class="date">2026-11-11</td>
+          <td><a href="https://www.endava.com/en/careers/" target="_blank" rel="noopener">Java Developer</a></td>
+          <td>Endava</td>
+          <td><span class="badge">hipo.ro</span></td>
+          <td>Cluj-Napoca</td>
+        </tr>
+        <tr data-company="N/A" data-source="hipo.ro">
+          <td class="date">2026-11-10</td>
+          <td><a href="https://www.hipo.ro/ro/job/ios-cluj" target="_blank" rel="noopener">iOS Developer</a></td>
+          <td>N/A</td>
+          <td><span class="badge">hipo.ro</span></td>
+          <td>Cluj-Napoca</td>
+        </tr>
+        <tr data-company="N/A" data-source="ejobs.ro">
+          <td class="date">2026-11-10</td>
+          <td><a href="https://www.ejobs.ro/user/locuri-de-munca/angular-cluj" target="_blank" rel="noopener">Angular Developer</a></td>
+          <td>N/A</td>
+          <td><span class="badge">ejobs.ro</span></td>
+          <td>Cluj-Napoca</td>
+        </tr>
+        <tr data-company="N/A" data-source="bestjobs.eu">
+          <td class="date">2026-11-09</td>
+          <td><a href="https://www.bestjobs.eu/ro/locuri-de-munca/devops-cluj" target="_blank" rel="noopener">DevOps / SRE Engineer</a></td>
+          <td>N/A</td>
+          <td><span class="badge">bestjobs.eu</span></td>
+          <td>Cluj-Napoca</td>
+        </tr>
+  </tbody>
+</table>
+<p id="noResults" class="hidden" style="text-align:center;padding:3rem;color:var(--muted);">No jobs match your filters.</p>
+</div>
+
+<div class="footer">
+  Data scraped from public job boards and company career pages. · 
+  <a href="jobs.json" target="_blank">Raw JSON</a> ·
+  Built with ❤️ for the Cluj tech community
+</div>
+
+<script>
+  function filter() {
+    const q = document.getElementById('search').value.toLowerCase();
+    const co = document.getElementById('companyFilter').value;
+    const src = document.getElementById('sourceFilter').value;
+    const rows = document.querySelectorAll('#jobTable tbody tr');
+    let visible = 0;
+    rows.forEach(row => {
+      const text = row.textContent.toLowerCase();
+      const company = row.dataset.company;
+      const source = row.dataset.source;
+      const show = (!q || text.includes(q))
+                && (!co || company === co)
+                && (!src || source === src);
+      row.classList.toggle('hidden', !show);
+      if (show) visible++;
+    });
+    document.getElementById('count').textContent = visible + ' jobs shown';
+    document.getElementById('noResults').classList.toggle('hidden', visible > 0);
+  }
+  filter();
+</script>
+</body>
+</html>
