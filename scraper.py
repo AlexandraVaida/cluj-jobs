@@ -407,28 +407,15 @@ def generate_html(jobs):
     companies = sorted(set(j["company"] for j in jobs))
     sources = sorted(set(j["source"] for j in jobs))
 
-    # Build job cards
-    cards = ""
+    rows = ""
     for j in jobs:
-        initials = "".join(w[0] for w in j["company"].split()[:2] if w).upper() or "?"
-        cards += f"""
-        <div class="card" data-company="{j['company']}" data-source="{j['source']}" data-text="{j['title'].lower()} {j['company'].lower()}">
-          <div class="card-left">
-            <div class="avatar">{initials}</div>
-          </div>
-          <div class="card-body">
-            <a class="job-title" href="{j['url']}" target="_blank" rel="noopener">{j['title']}</a>
-            <div class="job-meta">
-              <span class="company-name">{j['company']}</span>
-              <span class="dot">·</span>
-              <span class="location">📍 {j.get('location','Cluj-Napoca')}</span>
-            </div>
-          </div>
-          <div class="card-right">
-            <span class="badge">{j['source']}</span>
-            <span class="date">{j['date']}</span>
-          </div>
-        </div>"""
+        rows += f"""
+        <tr data-company="{j['company']}" data-source="{j['source']}">
+          <td class="date">{j['date']}</td>
+          <td><a href="{j['url']}" target="_blank" rel="noopener">{j['title']}</a></td>
+          <td>{j['company']}</td>
+          <td><span class="badge">{j['source']}</span></td>
+        </tr>"""
 
     company_opts = "\n".join(
         f'<option value="{c}">{c}</option>' for c in companies
@@ -445,9 +432,6 @@ def generate_html(jobs):
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Cluj Tech Jobs</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
   :root {{
     --burgundy:   #6B1F2A;
@@ -460,7 +444,6 @@ def generate_html(jobs):
     --text-soft:  #6B5B52;
     --white:      #FDFAF6;
     --shadow:     rgba(44,24,16,.10);
-    --radius:     14px;
   }}
 
   * {{ box-sizing: border-box; margin: 0; padding: 0; }}
@@ -468,14 +451,15 @@ def generate_html(jobs):
   body {{
     background: var(--cream);
     color: var(--text);
-    font-family: 'Inter', system-ui, sans-serif;
+    /* SF Pro on Apple · Aptos on modern Windows · Segoe UI fallback · system-ui last */
+    font-family: 'Aptos', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
     min-height: 100vh;
   }}
 
   /* ── Header ── */
   header {{
     background: var(--burgundy-d);
-    padding: 2.5rem 3rem 2rem;
+    padding: 2.5rem 3rem 2.5rem;
     position: relative;
     overflow: hidden;
   }}
@@ -497,47 +481,45 @@ def generate_html(jobs):
     gap: 1rem;
   }}
   header h1 {{
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: 2.4rem;
+    font-size: 2.2rem;
     font-weight: 700;
     color: var(--cream);
     letter-spacing: -0.02em;
-    line-height: 1.1;
+    line-height: 1.15;
   }}
   header h1 span {{
-    color: var(--cream-dd);
+    color: rgba(245,239,230,.55);
     font-weight: 400;
     display: block;
-    font-size: 1rem;
-    font-family: 'Inter', sans-serif;
-    letter-spacing: 0.08em;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    margin-bottom: 0.3rem;
+    margin-bottom: 0.35rem;
   }}
   .header-meta {{
     text-align: right;
-    color: rgba(245,239,230,.6);
+    color: rgba(245,239,230,.55);
     font-size: 0.8rem;
-    line-height: 1.6;
+    line-height: 1.7;
   }}
-  .header-meta strong {{ color: var(--cream); }}
+  .header-meta strong {{ color: var(--cream); font-weight: 600; }}
 
-  /* ── Controls ── */
+  /* ── Controls bar ── */
   .controls-wrap {{
     background: var(--white);
     border-bottom: 1px solid var(--cream-dd);
     position: sticky;
     top: 0;
     z-index: 100;
-    box-shadow: 0 2px 12px var(--shadow);
+    box-shadow: 0 2px 10px var(--shadow);
   }}
   .controls {{
     max-width: 1100px;
     margin: 0 auto;
-    padding: 1rem 3rem;
+    padding: 0.85rem 3rem;
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: 0.65rem;
     align-items: center;
   }}
   .search-wrap {{
@@ -547,7 +529,7 @@ def generate_html(jobs):
   }}
   .search-wrap svg {{
     position: absolute;
-    left: 0.75rem;
+    left: 0.8rem;
     top: 50%;
     transform: translateY(-50%);
     color: var(--text-soft);
@@ -555,10 +537,10 @@ def generate_html(jobs):
   }}
   input[type=search] {{
     width: 100%;
-    padding: 0.6rem 0.75rem 0.6rem 2.3rem;
+    padding: 0.55rem 0.75rem 0.55rem 2.3rem;
     border: 1.5px solid var(--cream-dd);
     border-radius: 999px;
-    font-family: 'Inter', sans-serif;
+    font-family: inherit;
     font-size: 0.875rem;
     color: var(--text);
     background: var(--cream);
@@ -568,13 +550,13 @@ def generate_html(jobs):
   }}
   input[type=search]:focus {{
     border-color: var(--burgundy);
-    box-shadow: 0 0 0 3px rgba(107,31,42,.12);
+    box-shadow: 0 0 0 3px rgba(107,31,42,.10);
   }}
   select {{
-    padding: 0.6rem 2rem 0.6rem 0.9rem;
+    padding: 0.55rem 2.1rem 0.55rem 0.9rem;
     border: 1.5px solid var(--cream-dd);
     border-radius: 999px;
-    font-family: 'Inter', sans-serif;
+    font-family: inherit;
     font-size: 0.875rem;
     color: var(--text);
     background: var(--cream) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B5B52' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 0.7rem center;
@@ -593,111 +575,82 @@ def generate_html(jobs):
     font-weight: 500;
   }}
 
-  /* ── Cards ── */
-  .cards-wrap {{
+  /* ── Table ── */
+  .table-wrap {{
     max-width: 1100px;
     margin: 2rem auto;
     padding: 0 3rem 3rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
   }}
-
-  .card {{
+  table {{
+    width: 100%;
+    border-collapse: collapse;
     background: var(--white);
-    border: 1px solid var(--cream-dd);
-    border-radius: var(--radius);
-    padding: 1.1rem 1.4rem;
-    display: flex;
-    align-items: center;
-    gap: 1.1rem;
-    transition: box-shadow .2s, border-color .2s, transform .15s;
-    cursor: default;
-  }}
-  .card:hover {{
-    box-shadow: 0 4px 20px var(--shadow);
-    border-color: var(--burgundy-l);
-    transform: translateY(-1px);
-  }}
-
-  .avatar {{
-    width: 42px;
-    height: 42px;
-    min-width: 42px;
-    border-radius: 10px;
-    background: linear-gradient(135deg, var(--burgundy), var(--burgundy-l));
-    color: var(--cream);
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: 1rem;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    letter-spacing: 0.03em;
-  }}
-
-  .card-body {{
-    flex: 1;
-    min-width: 0;
-  }}
-  .job-title {{
-    display: block;
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--text);
-    text-decoration: none;
-    white-space: nowrap;
+    border-radius: 14px;
     overflow: hidden;
-    text-overflow: ellipsis;
-    margin-bottom: 0.25rem;
-    transition: color .15s;
+    box-shadow: 0 2px 16px var(--shadow);
+    border: 1px solid var(--cream-dd);
   }}
-  .job-title:hover {{
+  thead th {{
+    text-align: left;
+    padding: 0.9rem 1.2rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-soft);
+    background: var(--cream-d);
+    border-bottom: 1px solid var(--cream-dd);
+  }}
+  tbody tr {{
+    border-bottom: 1px solid var(--cream-d);
+    transition: background .15s;
+  }}
+  tbody tr:last-child {{ border-bottom: none; }}
+  tbody tr:hover {{ background: var(--cream); }}
+  td {{
+    padding: 0.85rem 1.2rem;
+    font-size: 0.875rem;
+    vertical-align: middle;
+  }}
+  td.date {{
+    color: var(--text-soft);
+    font-size: 0.78rem;
+    white-space: nowrap;
+    width: 90px;
+  }}
+  td.company {{
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap;
+  }}
+  a.job-link {{
+    color: var(--burgundy-d);
+    text-decoration: none;
+    font-weight: 500;
+  }}
+  a.job-link:hover {{
     color: var(--burgundy);
     text-decoration: underline;
     text-decoration-color: var(--burgundy-l);
   }}
-  .job-meta {{
-    font-size: 0.8rem;
-    color: var(--text-soft);
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    flex-wrap: wrap;
-  }}
-  .company-name {{ font-weight: 500; }}
-  .dot {{ color: var(--cream-dd); }}
-
-  .card-right {{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0.4rem;
-    flex-shrink: 0;
-  }}
   .badge {{
-    background: rgba(107,31,42,.08);
+    display: inline-block;
+    background: rgba(107,31,42,.07);
     color: var(--burgundy);
-    border: 1px solid rgba(107,31,42,.18);
+    border: 1px solid rgba(107,31,42,.16);
     padding: .2rem .65rem;
     border-radius: 999px;
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     font-weight: 500;
-    white-space: nowrap;
-  }}
-  .date {{
-    font-size: 0.75rem;
-    color: var(--text-soft);
     white-space: nowrap;
   }}
 
   .hidden {{ display: none !important; }}
-
   #noResults {{
     text-align: center;
     padding: 4rem 2rem;
     color: var(--text-soft);
-    font-size: 0.95rem;
+    font-size: 0.9rem;
   }}
 
   /* ── Footer ── */
@@ -714,11 +667,11 @@ def generate_html(jobs):
   /* ── Responsive ── */
   @media (max-width: 700px) {{
     header {{ padding: 2rem 1.5rem 1.75rem; }}
-    header h1 {{ font-size: 1.8rem; }}
+    header h1 {{ font-size: 1.75rem; }}
     .header-meta {{ display: none; }}
-    .controls {{ padding: 0.75rem 1.5rem; }}
-    .cards-wrap {{ padding: 1rem 1.5rem 2rem; }}
-    .card-right .badge {{ display: none; }}
+    .controls {{ padding: 0.75rem 1.25rem; }}
+    .table-wrap {{ padding: 1rem 1.25rem 2rem; }}
+    td.source {{ display: none; }}
   }}
 </style>
 </head>
@@ -727,12 +680,12 @@ def generate_html(jobs):
 <header>
   <div class="header-inner">
     <h1>
-      <span>Cluj-Napoca</span>
+      <span>Cluj-Napoca · Romania</span>
       Tech Jobs Board
     </h1>
     <div class="header-meta">
       Updated <strong>{updated}</strong><br/>
-      <strong>{len(jobs)}</strong> open positions · auto-refreshed daily
+      <strong>{len(jobs)}</strong> open positions &nbsp;·&nbsp; auto-refreshed daily
     </div>
   </div>
 </header>
@@ -755,8 +708,20 @@ def generate_html(jobs):
   </div>
 </div>
 
-<div class="cards-wrap" id="cardGrid">
-  {cards}
+<div class="table-wrap">
+  <table id="jobTable">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Job Title</th>
+        <th>Company</th>
+        <th class="source">Source</th>
+      </tr>
+    </thead>
+    <tbody>
+      {rows}
+    </tbody>
+  </table>
   <p id="noResults" class="hidden">No jobs match your filters — try a different keyword.</p>
 </div>
 
@@ -771,16 +736,16 @@ def generate_html(jobs):
     const q = document.getElementById('search').value.toLowerCase();
     const co = document.getElementById('companyFilter').value;
     const src = document.getElementById('sourceFilter').value;
-    const cards = document.querySelectorAll('.card');
+    const rows = document.querySelectorAll('#jobTable tbody tr');
     let visible = 0;
-    cards.forEach(card => {{
-      const text = card.dataset.text || card.textContent.toLowerCase();
-      const company = card.dataset.company;
-      const source = card.dataset.source;
+    rows.forEach(row => {{
+      const text = row.textContent.toLowerCase();
+      const company = row.dataset.company;
+      const source = row.dataset.source;
       const show = (!q || text.includes(q))
                 && (!co || company === co)
                 && (!src || source === src);
-      card.classList.toggle('hidden', !show);
+      row.classList.toggle('hidden', !show);
       if (show) visible++;
     }});
     document.getElementById('count').textContent = visible + ' positions';
